@@ -15,6 +15,7 @@ package csulb.cecs323.app;
 // Import all of the entity classes that we have written for this application.
 
 import csulb.cecs323.model.*;
+import org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolationException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -75,45 +76,61 @@ public class JPABooksProject {
 
 		while (!quit) {
 
-			// begin a new transaction
-			tx.begin();
+			try {
 
-			// prompt for choice
-			int choice = promptForMainMenuChoice(scanner);
+				// begin a new transaction
+				tx.begin();
 
-			// condition for whether any changes made should be committed
-			boolean validTransaction;
+				// prompt for choice
+				int choice = promptForMainMenuChoice(scanner);
 
-			// perform an operation based on the choice
-			switch (choice) {
-				case -1 -> {
-					quit = true;
-					validTransaction = false;
+				// condition for whether any changes made should be committed
+				boolean validTransaction;
+
+				// perform an operation based on the choice
+				switch (choice) {
+					case -1 -> {
+						quit = true;
+						validTransaction = false;
+					}
+					case 1 -> validTransaction = performAddOperation(scanner);
+					case 2 -> validTransaction = performInfoOperation(scanner);
+					case 3 -> validTransaction = performDeleteOperation(scanner);
+					case 4 -> validTransaction = performUpdateOperation(scanner);
+					case 5 -> validTransaction = performPrimaryKeyOperation(scanner);
+					default -> {
+						System.out.println("\nPlease select a valid option.\n");
+						validTransaction = false;
+					}
 				}
-				case 1 -> validTransaction = performAddOperation(scanner);
-				case 2 -> validTransaction = performInfoOperation(scanner);
-				case 3 -> validTransaction = performDeleteOperation(scanner);
-				case 4 -> validTransaction = performUpdateOperation(scanner);
-				case 5 -> validTransaction = performPrimaryKeyOperation(scanner);
-				default -> {
-					System.out.println("\nPlease select a valid option.\n");
-					validTransaction = false;
-				}
-			}
 
-			// If the user chose to quit, do that.
-			if (quit) {
-				System.out.println("\nExiting application.\n");
-				tx.rollback();
-			}
-			// If the transaction is valid, commit it; else rollback
-			else if (validTransaction) {
-				System.out.println("\nSuccessful transaction, committing to database.\n");
-				tx.commit();
-			}
-			else {
-				System.out.println("\nTransaction failed (or cancelled). Rolling back changes.\n");
-				tx.rollback();
+				// If the user chose to quit, do that.
+				if (quit) {
+					System.out.println("\nExiting application.\n");
+					tx.rollback();
+				}
+				// If the transaction is valid, commit it; else rollback
+				else if (validTransaction) {
+					tx.commit();
+					System.out.println("\nSuccessful transaction, committing to database.\n");
+					// ^ print this AFTER calling commit so that if an error occurs during the commit it does not print
+				}
+				else {
+					System.out.println("\nTransaction failed (or cancelled). Rolling back changes.\n");
+					tx.rollback();
+				}
+
+			} catch (Exception e) {
+				String message = e.getMessage();
+				if (message.contains("DerbySQLIntegrityConstraintViolationException")) {
+					if (message.contains("INSERT INTO PUBLISHERS")) {
+						System.out.println("\nError: a publisher already exists with the given information.");
+					} else if (message.contains("INSERT INTO AUTHORING_ENTITIES")) {
+						System.out.println("\nError: an authoring entity already exists with the given information.");
+					} else if (message.contains("INSERT INTO BOOKS")) {
+						System.out.println("\nError: a book already exists with the given information.");
+					}
+				}
 			}
 		}
 
