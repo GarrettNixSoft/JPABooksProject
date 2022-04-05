@@ -20,13 +20,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import javax.persistence.criteria.CriteriaBuilder;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
 /**
  * The JPA Project implementing entity relationships with books and authors.
@@ -72,11 +69,6 @@ public class JPABooksProject {
 		// See: https://en.wikibooks.org/wiki/Java_Persistence/Transactions
 		EntityTransaction tx = manager.getTransaction();
 
-//      List <Publishers> publishers = new ArrayList<>();
-//      publishers.add(new Publishers("The Book Publishers Inc.", "the@bookpublishersinc.com", "(555) 123-4567"));
-//      publishers.add(new Publishers("We Publish Books", "bookpub@read.com", "(555) 321-7654"));
-//      jpa.createEntity (publishers);
-
 		Scanner scanner = new Scanner(System.in);
 
 		boolean quit = false;
@@ -100,8 +92,9 @@ public class JPABooksProject {
 				}
 				case 1 -> validTransaction = performAddOperation(scanner);
 				case 2 -> validTransaction = performInfoOperation(scanner);
-				case 3 -> validTransaction = performUpdateOperation(scanner);
-				case 4 -> validTransaction = performDeleteOperation(scanner);
+				case 3 -> validTransaction = performDeleteOperation(scanner);
+				case 4 -> validTransaction = performUpdateOperation(scanner);
+				case 5 -> validTransaction = performPrimaryKeyOperation(scanner);
 				default -> {
 					System.out.println("\nPlease select a valid option.\n");
 					validTransaction = false;
@@ -160,8 +153,9 @@ public class JPABooksProject {
 		System.out.println("\n******** MAIN MENU ********");
 		System.out.println("1. Add a new object");
 		System.out.println("2. List object information");
-		System.out.println("3. Update a book");
-		System.out.println("4. Delete a book");
+		System.out.println("3. Delete a book");
+		System.out.println("4. Update a book");
+		System.out.println("5. List primary keys");
 		System.out.println("\nOr enter Q to quit.\n");
 	}
 
@@ -647,6 +641,11 @@ public class JPABooksProject {
 	}
 
 	private static boolean performDeleteOperation(Scanner scanner) {
+		// TODO
+		return false;
+	}
+
+	private static boolean performPrimaryKeyOperation(Scanner scanner) {
 		// TODO
 		return false;
 	}
