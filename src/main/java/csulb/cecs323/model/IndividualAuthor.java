@@ -1,3 +1,5 @@
+package csulb.cecs323.model;
+
 import javax.persistence.*;
 
 import java.util.Set;
