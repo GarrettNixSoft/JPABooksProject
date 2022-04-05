@@ -16,26 +16,16 @@ public class AdHocTeam extends Authoring_Entities {
 	)
 	private Set<IndividualAuthor> teamMembers = new HashSet<IndividualAuthor>();
 
-	@Id
-	@Column(nullable = false, length = 30)
-	private String ad_hoc_teams_email;
-
-	public AdHocTeam(String ad_hoc_teams_email, Set<IndividualAuthor> teamMembers)
-	{
-		this.ad_hoc_teams_email = ad_hoc_teams_email;
-		this.teamMembers = teamMembers;
-	}
-
 	public AdHocTeam() { }
 
 	public String getAd_hoc_teams_email()
 	{
-		return ad_hoc_teams_email;
+		return getEmail();
 	}
 
 	public void setAd_hoc_teams_email(String ad_hoc_teams_email)
 	{
-		this.ad_hoc_teams_email = ad_hoc_teams_email;
+		setEmail(ad_hoc_teams_email);
 
 	}
 
@@ -46,6 +36,12 @@ public class AdHocTeam extends Authoring_Entities {
 	public void setTeamMembers(Set<IndividualAuthor> authors)
 	{
 		teamMembers = authors;
+	}
+
+	public void addTeamMembers(IndividualAuthor authors)
+	{
+		this.teamMembers.add(authors);
+		authors.getTeamMemberships().add(this);
 	}
 
 }
