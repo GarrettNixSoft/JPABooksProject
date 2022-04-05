@@ -41,12 +41,13 @@ import java.util.Set;
 		resultClass = Writing_Groups.class
 )
 public abstract class Authoring_Entities {
-	@Id
-	@Column(nullable = false, length = 80)
-	private String name;
 
+	@Id
 	@Column(nullable = false, length = 30)
 	private String email;
+
+	@Column(nullable = false, length = 80)
+	private String name;
 
 	@OneToMany
 	@JoinColumn(name = "AUTHORING_ENTITY_NAME")

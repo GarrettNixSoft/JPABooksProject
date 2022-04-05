@@ -18,7 +18,7 @@ import javax.persistence.*;
 public class Publishers {
 
 	@Id
-	@Column(nullable = false, length = 80, unique = true)
+	@Column(nullable = false, length = 80)
 	private String name;
 
 	@Column(nullable = false, length = 80, unique = true)

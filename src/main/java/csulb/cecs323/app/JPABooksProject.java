@@ -537,21 +537,6 @@ public class JPABooksProject {
 		System.out.println();
 	}
 
-	private static boolean editPublisher(Scanner scanner, Publishers publisher) {
-		// TODO
-		return false;
-	}
-
-	private static boolean editBook(Scanner scanner, Books books) {
-		// TODO
-		return false;
-	}
-
-	private static boolean editWritingGroup(Scanner scanner, Writing_Groups group) {
-		// TODO
-		return false;
-	}
-
 	/**
 	 * Display a list of books retrieved from the database, and
 	 * prompt the user for a choice.
@@ -598,11 +583,8 @@ public class JPABooksProject {
 		for (int i = 0; i < books.size(); i++) {
 			Books book = books.get(i);
 
-			StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.append(i + 1).append(". ");
-			stringBuilder.append("Title: ").append(book.getTitle());
-			while (stringBuilder.length() < 30) stringBuilder.append(' ');
-			stringBuilder.append("ISBN: ").append(book.getISBN());
+			String stringBuilder = (i + 1) + ". " +
+					"ISBN: " + book.getISBN();
 
 			System.out.println(stringBuilder);
 		}
@@ -667,14 +649,72 @@ public class JPABooksProject {
 		return false;
 	}
 
+	private static boolean editPublisher(Scanner scanner, Publishers publisher) {
+		// TODO
+		return false;
+	}
+
+	private static boolean editBook(Scanner scanner, Books books) {
+		// TODO
+		return false;
+	}
+
+	private static boolean editWritingGroup(Scanner scanner, Writing_Groups group) {
+		// TODO
+		return false;
+	}
+
 	private static boolean performDeleteOperation(Scanner scanner) {
 		// TODO
 		return false;
 	}
 
 	private static boolean performPrimaryKeyOperation(Scanner scanner) {
-		// TODO
-		return false;
+
+		while (true) {
+			try {
+
+				displayPrimaryKeyMenu();
+
+				String response = promptForString(scanner, "Choose an option (#), or Q to cancel: ");
+				if (response.trim().equalsIgnoreCase("q")) return false;
+
+				int choice = Integer.parseInt(response);
+				if (choice <= 0 || choice > 3) throw new IllegalArgumentException("Please enter a number 1-3.");
+
+				switch (choice) {
+					case 1 -> listPublisherPrimaryKeys();
+					case 2 -> listBookPrimaryKeys();
+					case 3 -> listAuthoringEntityPrimaryKeys();
+				}
+
+				return true;
+
+			} catch (Exception e) {
+				System.out.println("Error: " + e.getMessage() + "; Please try again.");
+			}
+		}
+
+	}
+
+	private static void displayPrimaryKeyMenu() {
+		System.out.println("******** ENTITY TYPES ********");
+		System.out.println("1. Publishers");
+		System.out.println("2. Books");
+		System.out.println("3. Authoring Entities");
+		System.out.println();
+	}
+
+	private static void listPublisherPrimaryKeys() {
+		displayAvailablePublishers(getPublishers());
+	}
+
+	private static void listBookPrimaryKeys() {
+		displayAvailableBooks(getBooks());
+	}
+
+	private static void listAuthoringEntityPrimaryKeys() {
+		displayAvailableAuthors(getAuthors());
 	}
 
 	/**
@@ -773,8 +813,24 @@ public class JPABooksProject {
 		for (int i = 0; i < authors.size(); i++) {
 			Authoring_Entities author = authors.get(i);
 
-			String stringBuilder = (i + 1) + ". " +
-					"Name: " + author.getName();
+			StringBuilder stringBuilder = new StringBuilder();
+			stringBuilder.append(i + 1).append(". ");
+			stringBuilder.append("Email: ").append(author.getEmail());
+			while (stringBuilder.length() < 30) stringBuilder.append(' ');
+
+			// If using Java 17 preview features, can do it this way:
+//			switch (author) {
+//				case Writing_Groups w -> stringBuilder.append(" (Writing Group)");
+//				case IndividualAuthor ind -> stringBuilder.append(" (Individual Author)");
+//				case AdHocTeam a -> stringBuilder.append(" (Ad Hoc Team)");
+//				default -> stringBuilder.append(" (Authoring Entity)");
+//			}
+
+			// Otherwise, do it this way:
+			if (author instanceof Writing_Groups) stringBuilder.append(" (Writing Group)");
+			else if (author instanceof IndividualAuthor) stringBuilder.append(" (Individual Author)");
+			else if (author instanceof AdHocTeam) stringBuilder.append(" (Ad Hoc Team)");
+			else stringBuilder.append(" (Authoring Entity)");
 
 			System.out.println(stringBuilder);
 		}
