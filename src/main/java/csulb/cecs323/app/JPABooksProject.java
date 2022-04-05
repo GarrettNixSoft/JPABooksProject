@@ -231,8 +231,8 @@ public class JPABooksProject {
 
 				switch (choice) {
 					case 1 -> { return addWritingGroup(scanner); }
-					case 2 -> {}
-					case 3 -> {}
+					case 2 -> { return addIndividualAuthor(scanner); }
+					case 3 -> { return addAdHocTeam(scanner); }
 				}
 
 			} catch (Exception e) {
@@ -300,6 +300,16 @@ public class JPABooksProject {
 				System.out.println("Error: " + e.getMessage() + "; Please try again.");
 			}
 		}
+	}
+
+	private static boolean addIndividualAuthor(Scanner scanner) {
+		// TODO
+		return false;
+	}
+
+	private static boolean addAdHocTeam(Scanner scanner) {
+		// TODO
+		return false;
 	}
 
 	/**
