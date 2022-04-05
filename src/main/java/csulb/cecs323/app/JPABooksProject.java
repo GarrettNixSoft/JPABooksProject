@@ -709,7 +709,17 @@ public class JPABooksProject {
 	}
 
 	private static boolean performDeleteOperation(Scanner scanner) {
-		// TODO
+
+		// Prompting for book, returns null if choosing to quit and not delete
+		Books book = promptForBookChoice(scanner);
+
+		if(book!=null) {
+			// Provide helpful message for deleted book
+			System.out.println(book.getTitle() + " has been deleted (ISBN: " + book.getISBN() + ")");
+			jpa.entityManager.remove(book);
+			return true;
+		}
+
 		return false;
 	}
 
