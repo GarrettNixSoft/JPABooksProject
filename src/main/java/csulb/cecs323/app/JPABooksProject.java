@@ -319,14 +319,58 @@ public class JPABooksProject {
 		}
 	}
 
-	private static boolean addIndividualAuthor(Scanner scanner) {
-		// TODO
-		return false;
+	private static boolean addAdHocTeam(Scanner scanner)
+	{
+		while (true) {
+			try {
+
+				System.out.println("\n******** ADDING AD HOC TEAMS ********");
+
+				String adHocTeamEmail = promptForString(scanner, "Enter the Ad Hoc Team Email, or Q to cancel: ");
+				if (adHocTeamEmail.trim().equalsIgnoreCase("q")) return false;
+				if (adHocTeamEmail.trim().isEmpty()) throw new IllegalArgumentException(" Ad Hoc Team Email cannot be empty.");
+
+				AdHocTeam team = new AdHocTeam();
+
+				team.setAd_hoc_teams_email(adHocTeamEmail);
+
+				jpa.entityManager.persist(team);
+
+				return true;
+
+			} catch (Exception e) {
+				System.out.println("Error: " + e.getMessage() + "; Please try again.");
+			}
+		}
+
 	}
 
-	private static boolean addAdHocTeam(Scanner scanner) {
-		// TODO
-		return false;
+
+
+	private static boolean addIndividualAuthor(Scanner scanner)
+	{
+		while (true) {
+			try {
+
+				System.out.println("\n******** ADDING INDIVIDUAL AUTHOR ********");
+
+				String individualAuthorEmail = promptForString(scanner, "Enter the Individual Author Email, or Q to cancel: ");
+				if (individualAuthorEmail.trim().equalsIgnoreCase("q")) return false;
+				if (individualAuthorEmail.trim().isEmpty()) throw new IllegalArgumentException("Individual Author Email cannot be empty.");
+
+				IndividualAuthor authors = new IndividualAuthor();
+
+				authors.setIndividual_authors_email(individualAuthorEmail);
+
+
+				jpa.entityManager.persist(authors);
+
+				return true;
+
+			} catch (Exception e) {
+				System.out.println("Error: " + e.getMessage() + "; Please try again.");
+			}
+		}
 	}
 
 	/**
