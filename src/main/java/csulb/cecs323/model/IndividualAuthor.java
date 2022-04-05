@@ -10,9 +10,20 @@ public class IndividualAuthor extends Authoring_Entities {
 	@ManyToMany(mappedBy = "teamMembers")
 	private Set<AdHocTeam> teamMemberships;
 
+	@Id
+	@Column(nullable = false, length = 30)
 	private String individual_authors_email;
 
-	public IndividualAuthor() { }
+
+	public IndividualAuthor(String individual_authors_email, Set<AdHocTeam> teamMemberships)
+	{
+		this.individual_authors_email = individual_authors_email;
+		this.teamMemberships = teamMemberships;
+	}
+
+	public IndividualAuthor() {
+
+	}
 
 	public Set<AdHocTeam> getTeamMemberships() {
 		return teamMemberships;
@@ -32,4 +43,3 @@ public class IndividualAuthor extends Authoring_Entities {
 		this.teamMemberships = teamMemberships;
 	}
 }
-

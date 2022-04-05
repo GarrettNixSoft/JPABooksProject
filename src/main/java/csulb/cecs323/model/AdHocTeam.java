@@ -14,9 +14,17 @@ public class AdHocTeam extends Authoring_Entities {
 			joinColumns = @JoinColumn(name = "AD_HOC_TEAMS_EMAIL"),
 			inverseJoinColumns = @JoinColumn(name = "INDIVIDUAL_AUTHORS_EMAIL")
 	)
-	private Set<IndividualAuthor> teamMembers;
+	private Set<IndividualAuthor> teamMembers = new HashSet<IndividualAuthor>();
 
+	@Id
+	@Column(nullable = false, length = 30)
 	private String ad_hoc_teams_email;
+
+	public AdHocTeam(String ad_hoc_teams_email, Set<IndividualAuthor> teamMembers)
+	{
+		this.ad_hoc_teams_email = ad_hoc_teams_email;
+		this.teamMembers = teamMembers;
+	}
 
 	public AdHocTeam() { }
 
