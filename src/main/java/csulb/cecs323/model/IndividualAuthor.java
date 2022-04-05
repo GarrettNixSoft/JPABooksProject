@@ -2,27 +2,23 @@ package csulb.cecs323.model;
 
 import javax.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "IndividualAuthor")
 @DiscriminatorValue("IndividualAuthor")
 public class IndividualAuthor extends Authoring_Entities {
 	@ManyToMany(mappedBy = "teamMembers")
-	private Set<AdHocTeam> teamMemberships;
-
-	@Id
-	@Column(nullable = false, length = 30)
-	private String individual_authors_email;
-
-
-	public IndividualAuthor(String individual_authors_email, Set<AdHocTeam> teamMemberships)
-	{
-		this.individual_authors_email = individual_authors_email;
-		this.teamMemberships = teamMemberships;
-	}
+	private Set<AdHocTeam> teamMemberships = new HashSet<AdHocTeam>();
 
 	public IndividualAuthor() {
 
+	}
+
+	public void addTeamMemberships(AdHocTeam team)
+	{
+		this.teamMemberships.add(team);
+		team.getTeamMembers().add(this);
 	}
 
 	public Set<AdHocTeam> getTeamMemberships() {
@@ -31,15 +27,16 @@ public class IndividualAuthor extends Authoring_Entities {
 
 	public String getIndividual_authors_email()
 	{
-		return individual_authors_email;
+		return getEmail();
 	}
 
 	public void setIndividual_authors_email(String individual_authors_email)
 	{
-		this.individual_authors_email = individual_authors_email;
+		setEmail(individual_authors_email);
 	}
 
 	public void setTeamMemberships(Set<AdHocTeam> teamMemberships) {
 		this.teamMemberships = teamMemberships;
 	}
 }
+
