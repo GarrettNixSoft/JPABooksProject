@@ -333,7 +333,14 @@ public class JPABooksProject {
 			}
 		}
 	}
-
+	
+	/**
+	* Guides the user towards adding an Ad Hoc Team. Prompts the user to enter an ad hoc team email along with an ad hoc team name to be added into the database.
+	*
+	* @param scanner the scanner to use for getting input
+	* @return {@code true} if the user successfully completes the operation,
+	* 			or {@code false} if the user chooses to cancel.
+	*/
 	private static boolean addAdHocTeam(Scanner scanner)
 	{
 		while (true) {
@@ -344,10 +351,12 @@ public class JPABooksProject {
 				String adHocTeamEmail = promptForString(scanner, "Enter the Ad Hoc Team Email, or Q to cancel: ");
 				if (adHocTeamEmail.trim().equalsIgnoreCase("q")) return false;
 				else if (adHocTeamEmail.trim().isEmpty()) throw new IllegalArgumentException(" Ad Hoc Team Email cannot be empty.");
+				else if (adHocTeamEmail.length() > 30) throw new IllegalArgumentException("Ad Hoc Team email cannot exceed 30 characters long.");
 
 				String adHocTeamName = promptForString(scanner, "Enter the Ad Hoc Team Name, or Q to cancel: ");
 				if (adHocTeamName.trim().equalsIgnoreCase("q")) return false;
 				else if (adHocTeamName.trim().isEmpty()) throw new IllegalArgumentException("Ad Hoc Team Name cannot be empty.");
+				else if (adHocTeamName.length() > 30) throw new IllegalArgumentException("Ad Hoc Team email cannot exceed 30 characters long.");
 
 				AdHocTeam team = new AdHocTeam();
 
@@ -364,7 +373,14 @@ public class JPABooksProject {
 		}
 
 	}
-
+													 
+	/**
+	* Guides the user towards adding an Individual Author. Prompts the user to enter an individual author email along with an individual author name to be added into the database.
+	*
+	* @param scanner the scanner to use for getting input
+	* @return {@code true} if the user successfully completes the operation,
+	* 			or {@code false} if the user chooses to cancel.
+	*/
 	private static boolean addIndividualAuthor(Scanner scanner)
 	{
 		while (true) {
@@ -375,10 +391,12 @@ public class JPABooksProject {
 				String individualAuthorEmail = promptForString(scanner, "Enter the Individual Author Email, or Q to cancel: ");
 				if (individualAuthorEmail.trim().equalsIgnoreCase("q")) return false;
 				if (individualAuthorEmail.trim().isEmpty()) throw new IllegalArgumentException("Individual Author Email cannot be empty.");
+				else if (individualAuthorEmail.length() > 30) throw new IllegalArgumentException("Individual Author email cannot exceed 30 characters long.");
 
 				String individualAuthorName = promptForString(scanner, "Enter the Individual Author Name, or Q to cancel: ");
 				if (individualAuthorName.trim().equalsIgnoreCase("q")) return false;
-				else if (individualAuthorName.trim().isEmpty()) throw new IllegalArgumentException("Individual Author Name Name cannot be empty.");
+				else if (individualAuthorName.trim().isEmpty()) throw new IllegalArgumentException("Individual Author Name cannot be empty.");
+				else if (individualAuthorName.length() > 30) throw new IllegalArgumentException("Individual Author Name cannot exceed 30 characters long.");
 
 				IndividualAuthor authors = new IndividualAuthor();
 
@@ -395,7 +413,15 @@ public class JPABooksProject {
 			}
 		}
 	}
-
+	
+	/**
+	* Guides the user towards adding an Individual Author to an existing ad hoc team. 
+	* Prompts the user to enter an ad hoc team that exists in the database currently along with an individual author name to be added into the ad hoc team as a member.
+	*
+	* @param scanner the scanner to use for getting input
+	* @return {@code true} if the user successfully completes the operation,
+	* 			or {@code false} if the user chooses to cancel.
+	*/
 	private static boolean addTeamMembership(Scanner scanner)
 	{
 
@@ -691,13 +717,18 @@ public class JPABooksProject {
 			System.out.println(stringBuilder);
 		}
 	}
-
+	
+	/**
+	 * Display a list of Individual Authors currently in the database and the user selects which Individual Author they would like to access.
+	 * @param scanner the scanner to use for getting input
+	 * @return IndividualAuthor object that the user wants to get from the database.
+	 */
 	private static IndividualAuthor promptForIndividualAuthorChoice(Scanner scanner)
 	{
 		List<IndividualAuthor> authors = getIndividualAuthors();
 		if (authors.isEmpty()) {
 			System.out.println("\nError: missing required database information.");
-			System.out.println("Please ensure at least one writing group entry exists before requesting writing group info.");
+			System.out.println("Please ensure at least one Individual Author entity exists before requesting an Individual Author entity.");
 			return null;
 		}
 
@@ -720,13 +751,18 @@ public class JPABooksProject {
 			}
 		}
 	}
-
+	
+	/**
+	 * Display a list of Ad Hoc Teams currently in the database and the user selects which Ad Hoc Team they would like to access.
+	 * @param scanner the scanner to use for getting input
+	 * @return Ad Hoc Team object that the user wants to get from the database.
+	 */
 	private static AdHocTeam promptForAdHocTeamChoice(Scanner scanner)
 	{
 		List<AdHocTeam> teams = getAdHocTeams();
 		if (teams.isEmpty()) {
 			System.out.println("\nError: missing required database information.");
-			System.out.println("Please ensure at least one writing group entry exists before requesting writing group info.");
+			System.out.println("Please ensure at least one Ad Hoc Team entity exists in the database before requesting an Ad Hoc Team entity.");
 			return null;
 		}
 
@@ -741,7 +777,7 @@ public class JPABooksProject {
 				int choice = Integer.parseInt(response);
 				if (choice > teams.size() || choice <= 0) throw new IllegalArgumentException("Invalid selection. Please enter a number 1-" + teams.size());
 
-				// if the choice is valid, return that publisher
+				// if the choice is valid, return that team
 				return teams.get(choice - 1);
 
 			} catch (Exception e) {
@@ -803,7 +839,11 @@ public class JPABooksProject {
 			System.out.println(stringBuilder);
 		}
 	}
-
+	
+	/**
+	 * Display a list of Ad Hoc Teams as a numbered list.
+	 * @param teams the list of Ad Hoc Teams to display
+	 */
 	private static void displayAvailableAdHocTeams(List<AdHocTeam> teams)
 	{
 		System.out.println("\n******** AVAILABLE AD HOC TEAMS ********");
@@ -817,7 +857,11 @@ public class JPABooksProject {
 			System.out.println(stringBuilder);
 		}
 	}
-
+	
+	/**
+	 * Display a list of Individual Authors as a numbered list.
+	 * @param authors the list of Individual Authors to display
+	 */
 	private static void displayAvailableIndividualAuthors(List<IndividualAuthor> authors)
 	{
 		System.out.println("\n******** AVAILABLE INDIVIDUAL AUTHORS ********");
@@ -863,7 +907,13 @@ public class JPABooksProject {
 
 		return false;
 	}
-
+	
+	/**
+	* A menu that has the user choose which primary key they'd like to see.
+	* @param scanner the scanner to use for getting input
+	* @return {@code true} if the user successfully completes the operation,
+	*   		or {@code false} if the user chooses to cancel.
+	*/
 	private static boolean performPrimaryKeyOperation(Scanner scanner) {
 
 		while (true) {
@@ -893,7 +943,10 @@ public class JPABooksProject {
 	}
 
 
-
+	/*
+	* a Menu that displays the possible options a user can choose from.
+	*
+	*/
 	private static void displayPrimaryKeyMenu() {
 		System.out.println("******** ENTITY TYPES ********");
 		System.out.println("1. Publishers");
@@ -901,15 +954,27 @@ public class JPABooksProject {
 		System.out.println("3. Authoring Entities");
 		System.out.println();
 	}
-
+	
+	/*
+	* A list of all the primary keys for publishers.
+	*
+	*/
 	private static void listPublisherPrimaryKeys() {
 		displayAvailablePublishers(getPublishers());
 	}
-
+	
+	/*
+	* A list of all the primary keys for books.
+	*
+	*/
 	private static void listBookPrimaryKeys() {
 		displayAvailableBooks(getBooks());
 	}
-
+	
+	/*
+	* A list of all the primary keys for authoring entities.
+	*
+	*/
 	private static void listAuthoringEntityPrimaryKeys() {
 		displayAvailableAuthors(getAuthors());
 	}
