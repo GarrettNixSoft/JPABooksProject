@@ -884,13 +884,23 @@ public class JPABooksProject {
 
 				Books bookToEdit = promptForBookChoice(scanner);
 
-				// prompt for a new author using promptAuthorChoice or whatever I called it
+				if (bookToEdit == null)
+				{
+					System.out.println("There is no books in this database currently. Add a book to perform update operations.");
+					return false;
+				}
+
+				// prompt for a new author using promptForAuthorChoice or whatever I called it
+				Authoring_Entities authorToUpdate = promptForAuthorChoice(scanner);
+
+				bookToEdit.setAuthor(authorToUpdate);
+
+				return true;
 
 			} catch (Exception e) {
 				System.out.println("Error: " + e.getMessage() + "; Please try again.");
 			}
 		}
-
 	}
 
 	private static boolean performDeleteOperation(Scanner scanner) {
