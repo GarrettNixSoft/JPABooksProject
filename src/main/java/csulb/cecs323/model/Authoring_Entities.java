@@ -42,12 +42,12 @@ import java.util.Set;
 )
 public abstract class Authoring_Entities {
 
+	@Column(nullable = false, length = 80)
+	private String name;
+
 	@Id
 	@Column(nullable = false, length = 30)
 	private String email;
-
-	@Column(nullable = false, length = 80)
-	private String name;
 
 	@OneToMany
 	@JoinColumn(name = "AUTHORING_ENTITY_NAME")
