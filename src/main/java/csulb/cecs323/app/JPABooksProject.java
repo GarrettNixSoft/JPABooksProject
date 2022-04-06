@@ -838,76 +838,15 @@ public class JPABooksProject {
 		{
 			try {
 
-				displayPrimaryKeyMenu();
+				Books bookToEdit = promptForBookChoice(scanner);
 
-				String response = promptForString(scanner, "Choose an option (#), or Q to cancel: ");
-				if (response.trim().equalsIgnoreCase("q")) return false;
-
-				int choice = Integer.parseInt(response);
-				if (choice <= 0 || choice > 3) throw new IllegalArgumentException("Please enter a number 1-3.");
-
-				if (choice == 1)
-				{
-					displayAvailablePublishers(getPublishers());
-
-					response = promptForString(scanner, "Choose an option (#), or Q to cancel: ");
-					if (response.trim().equalsIgnoreCase("q")) return false;
-
-					choice = Integer.parseInt(response);
-					if (choice <= 0 || choice > getPublishers().size()) throw new IllegalArgumentException("Please enter a number 1-3.");
-
-					editPublisher(scanner, getPublishers().get(choice - 1));
-
-				}
-				else if (choice == 2)
-				{
-					displayAvailableBooks(getBooks());
-
-					response = promptForString(scanner, "Choose an option (#), or Q to cancel: ");
-					if (response.trim().equalsIgnoreCase("q")) return false;
-
-					choice = Integer.parseInt(response);
-					if (choice <= 0 || choice > getBooks().size()) throw new IllegalArgumentException("Please enter a number 1-3.");
-
-					editBook(scanner, getBooks().get(choice - 1));
-				}
-				else if (choice == 3)
-				{
-					displayAvailableWritingGroups(getWritingGroups());
-
-					response = promptForString(scanner, "Choose an option (#), or Q to cancel: ");
-					if (response.trim().equalsIgnoreCase("q")) return false;
-
-					choice = Integer.parseInt(response);
-					if (choice <= 0 || choice > getWritingGroups().size()) throw new IllegalArgumentException("Please enter a number 1-3.");
-
-					editWritingGroup(scanner, getWritingGroups().get(choice - 1));
-				}
-
-
-
-				return true;
+				// prompt for a new author using promptAuthorChoice or whatever I called it
 
 			} catch (Exception e) {
 				System.out.println("Error: " + e.getMessage() + "; Please try again.");
 			}
 		}
 
-	}
-
-	private static boolean editPublisher(Scanner scanner, Publishers publisher) {
-		// TODO
-		return false;
-	}
-
-	private static boolean editBook(Scanner scanner, Books books) {
-		// TODO
-		return false;
-	}
-
-	private static boolean editWritingGroup(Scanner scanner, Writing_Groups group) {
-		// TODO
-		return false;
 	}
 
 	private static boolean performDeleteOperation(Scanner scanner) {
