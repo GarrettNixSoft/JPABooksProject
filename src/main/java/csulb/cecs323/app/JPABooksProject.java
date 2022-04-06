@@ -249,9 +249,24 @@ public class JPABooksProject {
 				switch (choice) {
 					case 1 -> { return addWritingGroup(scanner); }
 					case 2 -> { return addIndividualAuthor(scanner); }
-					case 3 -> { return addAdHocTeam(scanner); }
-				}
+					case 3 ->
+							{
+								System.out.println("\n******** AD HOC TEAM ADD ********")
+								System.out.println("1. Add an Ad Hoc Team");
+								System.out.println("2. Add an Individual Author to an Ad Hoc Team");
+								response = promptForString(scanner, "Choose an option, or Q to cancel: ");
+								if (response.trim().equalsIgnoreCase("q")) return false;
 
+								choice = Integer.parseInt(response);
+								if (choice <= 0 || choice > 2) throw new IllegalArgumentException("Please select a number 1-2.");
+
+								switch(choice)
+								{
+									case 1 -> {return addAdHocTeam(scanner);}
+									case 2 -> {return addTeamMembership(scanner); }
+								}
+							}
+				}
 			} catch (Exception e) {
 				System.out.println("Error: " + e.getMessage() + "; Please try again.");
 			}
@@ -345,8 +360,6 @@ public class JPABooksProject {
 
 	}
 
-
-
 	private static boolean addIndividualAuthor(Scanner scanner)
 	{
 		while (true) {
@@ -371,6 +384,41 @@ public class JPABooksProject {
 				System.out.println("Error: " + e.getMessage() + "; Please try again.");
 			}
 		}
+	}
+
+	private static boolean addTeamMembership(Scanner scanner)
+	{
+
+		while(true)
+		{
+			try
+			{
+				AdHocTeam team = promptForAdHocTeamChoice(scanner);
+
+				boolean quit = false;
+
+				while(!quit)
+				{
+					IndividualAuthor author = promptForIndividualAuthorChoice(scanner);
+
+					if (author == null)
+					{
+						quit = true;
+					}
+
+					team.getTeamMembers().add(author);
+				}
+
+				jpa.entityManager.persist(team);
+				return true;
+			}
+			catch(Exception e)
+			{
+				System.out.println("Error: " + e.getMessage() + "; Please try again.");
+			}
+		}
+
+
 	}
 
 	/**
@@ -634,6 +682,64 @@ public class JPABooksProject {
 		}
 	}
 
+	private static IndividualAuthor promptForIndividualAuthorChoice(Scanner scanner)
+	{
+		List<IndividualAuthor> authors = getIndividualAuthors();
+		if (authors.isEmpty()) {
+			System.out.println("\nError: missing required database information.");
+			System.out.println("Please ensure at least one writing group entry exists before requesting writing group info.");
+			return null;
+		}
+
+		while (true) {
+			try {
+
+				displayAvailableIndividualAuthors(authors);
+
+				String response = promptForString(scanner, "Choose an Individual Author (#), or Q to cancel: ");
+				if (response.trim().equalsIgnoreCase("q")) return null;
+
+				int choice = Integer.parseInt(response);
+				if (choice > authors.size() || choice <= 0) throw new IllegalArgumentException("Invalid selection. Please enter a number 1-" + authors.size());
+
+				// if the choice is valid, return that publisher
+				return authors.get(choice - 1);
+
+			} catch (Exception e) {
+				System.out.println("Error: " + e.getMessage() + "; Please try again.");
+			}
+		}
+	}
+
+	private static AdHocTeam promptForAdHocTeamChoice(Scanner scanner)
+	{
+		List<AdHocTeam> teams = getAdHocTeams();
+		if (teams.isEmpty()) {
+			System.out.println("\nError: missing required database information.");
+			System.out.println("Please ensure at least one writing group entry exists before requesting writing group info.");
+			return null;
+		}
+
+		while (true) {
+			try {
+
+				displayAvailableAdHocTeams(teams);
+
+				String response = promptForString(scanner, "Choose an Ad Hoc Team (#), or Q to cancel: ");
+				if (response.trim().equalsIgnoreCase("q")) return null;
+
+				int choice = Integer.parseInt(response);
+				if (choice > teams.size() || choice <= 0) throw new IllegalArgumentException("Invalid selection. Please enter a number 1-" + teams.size());
+
+				// if the choice is valid, return that publisher
+				return teams.get(choice - 1);
+
+			} catch (Exception e) {
+				System.out.println("Error: " + e.getMessage() + "; Please try again.");
+			}
+		}
+	}
+
 	/**
 	 * Display a list of writing groups retrieved from the database,
 	 * and prompt the user for a choice.
@@ -688,9 +794,95 @@ public class JPABooksProject {
 		}
 	}
 
-	private static boolean performUpdateOperation(Scanner scanner) {
-		// TODO
-		return false;
+	private static void displayAvailableAdHocTeams(List<AdHocTeam> teams)
+	{
+		System.out.println("\n******** AVAILABLE AD HOC TEAMS ********");
+
+		for (int i = 0; i < teams.size(); i++) {
+			AdHocTeam team = teams.get(i);
+
+			String stringBuilder = (i + 1) + ". " +
+					team.getEmail();
+
+			System.out.println(stringBuilder);
+		}
+	}
+
+	private static void displayAvailableIndividualAuthors(List<IndividualAuthor> authors)
+	{
+		System.out.println("\n******** AVAILABLE INDIVIDUAL AUTHORS ********");
+
+		for (int i = 0; i < authors.size(); i++) {
+			IndividualAuthor author = authors.get(i);
+
+			String stringBuilder = (i + 1) + ". " +
+					author.getIndividual_authors_email();
+
+			System.out.println(stringBuilder);
+		}
+	}
+
+	private static boolean performUpdateOperation(Scanner scanner)
+	{
+		while (true)
+		{
+			try {
+
+				displayPrimaryKeyMenu();
+
+				String response = promptForString(scanner, "Choose an option (#), or Q to cancel: ");
+				if (response.trim().equalsIgnoreCase("q")) return false;
+
+				int choice = Integer.parseInt(response);
+				if (choice <= 0 || choice > 3) throw new IllegalArgumentException("Please enter a number 1-3.");
+
+				if (choice == 1)
+				{
+					displayAvailablePublishers(getPublishers());
+
+					response = promptForString(scanner, "Choose an option (#), or Q to cancel: ");
+					if (response.trim().equalsIgnoreCase("q")) return false;
+
+					choice = Integer.parseInt(response);
+					if (choice <= 0 || choice > getPublishers().size()) throw new IllegalArgumentException("Please enter a number 1-3.");
+
+					editPublisher(scanner, getPublishers().get(choice - 1));
+
+				}
+				else if (choice == 2)
+				{
+					displayAvailableBooks(getBooks());
+
+					response = promptForString(scanner, "Choose an option (#), or Q to cancel: ");
+					if (response.trim().equalsIgnoreCase("q")) return false;
+
+					choice = Integer.parseInt(response);
+					if (choice <= 0 || choice > getBooks().size()) throw new IllegalArgumentException("Please enter a number 1-3.");
+
+					editBook(scanner, getBooks().get(choice - 1));
+				}
+				else if (choice == 3)
+				{
+					displayAvailableWritingGroups(getWritingGroups());
+
+					response = promptForString(scanner, "Choose an option (#), or Q to cancel: ");
+					if (response.trim().equalsIgnoreCase("q")) return false;
+
+					choice = Integer.parseInt(response);
+					if (choice <= 0 || choice > getWritingGroups().size()) throw new IllegalArgumentException("Please enter a number 1-3.");
+
+					editWritingGroup(scanner, getWritingGroups().get(choice - 1));
+				}
+
+
+
+				return true;
+
+			} catch (Exception e) {
+				System.out.println("Error: " + e.getMessage() + "; Please try again.");
+			}
+		}
+
 	}
 
 	private static boolean editPublisher(Scanner scanner, Publishers publisher) {
@@ -750,6 +942,8 @@ public class JPABooksProject {
 		}
 
 	}
+
+
 
 	private static void displayPrimaryKeyMenu() {
 		System.out.println("******** ENTITY TYPES ********");
