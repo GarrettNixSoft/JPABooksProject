@@ -376,9 +376,14 @@ public class JPABooksProject {
 				if (individualAuthorEmail.trim().equalsIgnoreCase("q")) return false;
 				if (individualAuthorEmail.trim().isEmpty()) throw new IllegalArgumentException("Individual Author Email cannot be empty.");
 
+				String individualAuthorName = promptForString(scanner, "Enter the Individual Author Name, or Q to cancel: ");
+				if (individualAuthorName.trim().equalsIgnoreCase("q")) return false;
+				else if (individualAuthorName.trim().isEmpty()) throw new IllegalArgumentException("Individual Author Name Name cannot be empty.");
+
 				IndividualAuthor authors = new IndividualAuthor();
 
 				authors.setIndividual_authors_email(individualAuthorEmail);
+				authors.setName(individualAuthorName);
 
 
 				jpa.entityManager.persist(authors);
