@@ -251,7 +251,7 @@ public class JPABooksProject {
 					case 2 -> { return addIndividualAuthor(scanner); }
 					case 3 ->
 							{
-								System.out.println("\n******** AD HOC TEAM ADD ********")
+								System.out.println("\n******** AD HOC TEAM ADD ********");
 								System.out.println("1. Add an Ad Hoc Team");
 								System.out.println("2. Add an Individual Author to an Ad Hoc Team");
 								response = promptForString(scanner, "Choose an option, or Q to cancel: ");
@@ -262,8 +262,8 @@ public class JPABooksProject {
 
 								switch(choice)
 								{
-									case 1 -> {return addAdHocTeam(scanner);}
-									case 2 -> {return addTeamMembership(scanner); }
+									case 1 -> { return addAdHocTeam(scanner); }
+									case 2 -> { return addTeamMembership(scanner); }
 								}
 							}
 				}
@@ -343,11 +343,16 @@ public class JPABooksProject {
 
 				String adHocTeamEmail = promptForString(scanner, "Enter the Ad Hoc Team Email, or Q to cancel: ");
 				if (adHocTeamEmail.trim().equalsIgnoreCase("q")) return false;
-				if (adHocTeamEmail.trim().isEmpty()) throw new IllegalArgumentException(" Ad Hoc Team Email cannot be empty.");
+				else if (adHocTeamEmail.trim().isEmpty()) throw new IllegalArgumentException(" Ad Hoc Team Email cannot be empty.");
+
+				String adHocTeamName = promptForString(scanner, "Enter the Ad Hoc Team Name, or Q to cancel: ");
+				if (adHocTeamName.trim().equalsIgnoreCase("q")) return false;
+				else if (adHocTeamName.trim().isEmpty()) throw new IllegalArgumentException("Ad Hoc Team Name cannot be empty.");
 
 				AdHocTeam team = new AdHocTeam();
 
 				team.setAd_hoc_teams_email(adHocTeamEmail);
+				team.setName(adHocTeamName);
 
 				jpa.entityManager.persist(team);
 
