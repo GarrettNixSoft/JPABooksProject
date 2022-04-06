@@ -31,14 +31,14 @@ import java.util.Set;
 		query = "SELECT * " +
 				"FROM   AUTHORING_ENTITIES " +
 				"WHERE  AUTHORING_ENTITY_TYPE = 'IndividualAuthor'",
-		resultClass = Writing_Groups.class
+		resultClass = Individual_Author.class
 )
 @NamedNativeQuery(
 		name="ReturnAllAdHocTeams",
 		query = "SELECT * " +
 				"FROM   AUTHORING_ENTITIES " +
 				"WHERE  AUTHORING_ENTITY_TYPE = 'AdHocTeam'",
-		resultClass = Writing_Groups.class
+		resultClass = AdHocTeam.class
 )
 public abstract class Authoring_Entities {
 
