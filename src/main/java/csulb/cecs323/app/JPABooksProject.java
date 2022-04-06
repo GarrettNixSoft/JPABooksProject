@@ -1057,7 +1057,7 @@ public class JPABooksProject {
 				if (choice > authors.size() || choice <= 0) throw new IllegalArgumentException("Invalid selection. Please enter a number 1-" + authors.size());
 
 				// if the choice is valid, return that publisher
-				return authors.get(choice);
+				return authors.get(choice - 1);
 			} catch (Exception e) {
 				System.out.println("Error: " + e.getMessage() + "; Please try again.");
 			}
